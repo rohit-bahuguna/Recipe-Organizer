@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecipe } from '../contexts/dataContext'
 import RecipeCard from './RecipeCard'
 
@@ -35,25 +35,30 @@ const Recipe = () => {
             addNewRecipe(recipeData)
         }
     }
-    console.log(recipeData)
+    useEffect(() => {
+        if (filter.search && filter.searchBy) {
+            searchRecipe(filter.search, filter.searchBy)
+        }
+    }, [filter.search, filter.searchBy])
+
     return (
         <div className='flex justify-start px-10 items-center py-5 relative'>
             <div>
                 <div className='flex  w-[95vw] border px-5'>
-                    <input type="text" placeholder='Search the iteam you want' className='w-[50vw] text-lg px-2 py-3 mr-3 hover:outline-none' />
+                    <input type="text" placeholder='Search the iteam you want' value={filter.search} onChange={(e) => setFilter({ ...filter, search: e.target.value })} className='w-[50vw] text-lg px-2 py-3 mr-3 hover:outline-none' />
                     <div className='flex items-center gap-5'>
                         <label className='text-lg font-semibold mr-1'>Filter By</label>
 
                         <label className='flex items-center gap-2' NameFor="Name">
-                            <input className='w-4 h-4' type="radio" id="Name" name="filter" value="fullName" />
+                            <input onClick={() => setFilter({ ...filter, searchBy: "fullName" })} className='w-4 h-4' type="radio" id="Name" name="filter" value="fullName" />
                             <span>Name</span>
                         </label>
 
                         <label className='flex items-center gap-2' htmlFor="Ingredients">
-                            <input className='w-4 h-4' type="radio" id="Ingredients" name="filter" value="ingredients" />
+                            <input onClick={() => setFilter({ ...filter, searchBy: "ingredients" })} className='w-4 h-4' type="radio" id="Ingredients" name="filter" value="ingredients" />
                             <span>Ingredients</span></label>
                         <label className='flex items-center gap-2' htmlFor="Cuisine">
-                            <input className='w-4 h-4' type="radio" id="Cuisine" name="filter" value="cusine" />
+                            <input onClick={() => setFilter({ ...filter, searchBy: "cusine" })} className='w-4 h-4' type="radio" id="Cuisine" name="filter" value="cusine" />
 
                             <span>Cuisine</span></label>
                     </div>
